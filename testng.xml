@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Gmail Test">
+	<test name="CreateAndCheckDrafts">
+		<classes>
+			<class name="com.epam.yuri_karpov.selenium.tests.CreateAndCheckDraftsTest" />
+		</classes>
+	</test>
+
+	<test name="SendAndCheckMailsTest">
+		<classes>
+			<class name="com.epam.yuri_karpov.selenium.tests.SendAndCheckMailsTest" />
+		</classes>
+	</test>
+
+
+</suite> <!-- Default suite -->
