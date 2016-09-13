@@ -1,29 +1,22 @@
 package com.epam.yuri_karpov.selenium.ui.pageobject;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
-import org.openqa.selenium.By;
-import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.FluentWait;
 
 import com.epam.yuri_karpov.selenium.bo.Letter;
+import com.epam.yuri_karpov.selenium.service.WaitService;
 
 /**
  * Class works with Main page
  *
  * @author Yuri Karpov
  */
-public class MainPage {
+public class MainPage extends AbstractPage {
 
 	private static final String OK_BUTTON = "//button[@name='ok']";
 	private static final String THIRD_DRAFT = "//div[@role='main']//tbody/tr[3]";
@@ -120,13 +113,6 @@ public class MainPage {
 	@FindBy(xpath = "//div[@data-tooltip='Settings']")
 	private WebElement settingsButton;
 
-	private WebDriver driver;
-
-	public MainPage(WebDriver driver) {
-		this.driver = driver;
-		PageFactory.initElements(this.driver, this);
-	}
-
 	/**
 	 * Method for compose draft
 	 *
@@ -138,11 +124,11 @@ public class MainPage {
 		LOG.trace(letter.toString());
 
 		composeButton.click();
-		waitUntilPresenceOfElementLocated(NEW_MESSAGE);
+		WaitService.waitUntilPresenceOfElementLocated(NEW_MESSAGE);
 		composeTo.sendKeys(letter.getTo());
 		composeSubject.sendKeys(letter.getSubject());
 		draftTextField.sendKeys(letter.getText());
-		waitUntilPresenceOfElementLocated(SAVED_MESSAGE);
+		WaitService.waitUntilPresenceOfElementLocated(SAVED_MESSAGE);
 		closeComposeButton.click();
 		LOG.trace("finish 'composeMsg'");
 	}
@@ -158,12 +144,12 @@ public class MainPage {
 		LOG.trace(letter.toString());
 
 		composeButton.click();
-		waitUntilPresenceOfElementLocated(NEW_MESSAGE);
+		WaitService.waitUntilPresenceOfElementLocated(NEW_MESSAGE);
 		composeTo.sendKeys(letter.getTo());
 		composeSubject.sendKeys(letter.getSubject());
 		draftTextField.sendKeys(letter.getText());
 		sendMessage.click();
-		waitUntilPresenceOfElementLocated(VIEW_MESSAGE);
+		WaitService.waitUntilPresenceOfElementLocated(VIEW_MESSAGE);
 		LOG.trace("finish 'composeAndSendMsg'");
 	}
 
@@ -174,9 +160,9 @@ public class MainPage {
 		LOG.trace("start 'clickOnDraftsTab'");
 
 		draftsButton.click();
-		waitUntilElemntToBeClickable(THIRD_DRAFT);
+		WaitService.waitUntilElemntToBeClickable(THIRD_DRAFT);
 		selectAllDraftsOrMails.click();
-		waitUntilPresenceOfElementLocated(THIRD_DRAFT);
+		WaitService.waitUntilPresenceOfElementLocated(THIRD_DRAFT);
 		LOG.trace("finish 'clickOnDraftsTab'");
 	}
 
@@ -187,9 +173,9 @@ public class MainPage {
 		LOG.trace("start 'clickOnSentMail'");
 
 		sentMail.click();
-		waitUntilElemntToBeClickable(THIRD_DRAFT);
-		waitUntilElementToBeClickable(selectAllDraftsOrMails);
-		waitUntilPresenceOfElementLocated(THIRD_DRAFT);
+		WaitService.waitUntilElemntToBeClickable(THIRD_DRAFT);
+		WaitService.waitUntilElementToBeClickable(selectAllDraftsOrMails);
+		WaitService.waitUntilPresenceOfElementLocated(THIRD_DRAFT);
 		LOG.trace("finish 'clickOnSentMail'");
 	}
 
@@ -199,11 +185,11 @@ public class MainPage {
 	public void clickOnBackToSentMailButton() {
 		LOG.trace("start 'clickOnBackToSentMailButton'");
 
-		waitUntilElementToBeClickable(navigateToBackToSentMailButton);
+		WaitService.waitUntilElementToBeClickable(navigateToBackToSentMailButton);
 		new Actions(driver).moveToElement(navigateToBackToSentMailButton).build().perform();
-		waitUntilElementToBeClickable(backToSentMailButton);
+		WaitService.waitUntilElementToBeClickable(backToSentMailButton);
 		new Actions(driver).click(backToSentMailButton).build().perform();
-		waitUntilElemntToBeClickable(THIRD_DRAFT);
+		WaitService.waitUntilElemntToBeClickable(THIRD_DRAFT);
 		LOG.trace("finish 'clickOnBackToSentMailButton'");
 
 	}
@@ -215,7 +201,7 @@ public class MainPage {
 		LOG.trace("start 'discardDrafts'");
 
 		discardDrafts.click();
-		waitUntilPresenceOfElementLocated(DRAFTS_HAVE_BEEN_DELETED_MSG);
+		WaitService.waitUntilPresenceOfElementLocated(DRAFTS_HAVE_BEEN_DELETED_MSG);
 		LOG.trace("finish 'discardDrafts'");
 	}
 
@@ -226,11 +212,11 @@ public class MainPage {
 		LOG.trace("start 'discardSentMails'");
 
 		sentMail.click();
-		waitUntilElementToBeClickable(selectAllDraftsOrMails);
+		WaitService.waitUntilElementToBeClickable(selectAllDraftsOrMails);
 		selectAllDraftsOrMails.click();
-		waitUntilElementToBeClickable(deleteSentMails);
+		WaitService.waitUntilElementToBeClickable(deleteSentMails);
 		deleteSentMails.click();
-		waitUntilPresenceOfElementLocated(OK_BUTTON);
+		WaitService.waitUntilPresenceOfElementLocated(OK_BUTTON);
 		okButton.click();
 		LOG.trace("finish 'discardSentMails'");
 	}
@@ -245,47 +231,6 @@ public class MainPage {
 		ex.executeScript("arguments[0].click();", myMailButton);
 		signOutButton.click();
 		LOG.trace("finish 'logOut'");
-	}
-
-	/**
-	 * Method for waiting until WebElement to be clickable
-	 *
-	 * @param WebElement
-	 */
-	public void waitUntilElementToBeClickable(WebElement element) {
-		FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver).withTimeout(15, TimeUnit.SECONDS)
-		        .pollingEvery(3, TimeUnit.SECONDS)
-		        .ignoring(NoSuchElementException.class, ElementNotVisibleException.class);
-
-		wait.until(ExpectedConditions.elementToBeClickable(element));
-	}
-
-	/**
-	 * Method for waiting until WebElement to be clickable
-	 *
-	 * @param String
-	 *
-	 */
-	public void waitUntilElemntToBeClickable(String stringXpath) {
-		FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver).withTimeout(15, TimeUnit.SECONDS)
-		        .pollingEvery(3, TimeUnit.SECONDS)
-		        .ignoring(NoSuchElementException.class, ElementNotVisibleException.class);
-
-		wait.until(ExpectedConditions.elementToBeClickable(By.xpath(stringXpath)));
-	}
-
-	/**
-	 * Method for waiting until presence of WebElement to be located
-	 *
-	 * @param String
-	 *
-	 */
-	public void waitUntilPresenceOfElementLocated(String stringXpath) {
-		FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver).withTimeout(15, TimeUnit.SECONDS)
-		        .pollingEvery(3, TimeUnit.SECONDS)
-		        .ignoring(NoSuchElementException.class, ElementNotVisibleException.class);
-
-		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(stringXpath)));
 	}
 
 	public WebElement getDraftTextField() {

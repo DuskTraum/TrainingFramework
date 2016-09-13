@@ -59,9 +59,8 @@ public class CreateAndCheckDraftsTest extends BaseTest {
 		LOG.info("start 'LoginToGmail'");
 
 		account = new Account(resource.getString("login"), resource.getString("password"));
-		mailService = new MailService(driver);
+		mailService = new MailService();
 
-		driver.get(resource.getString("mainURL"));
 		mailService.loginToMail(account);
 		LOG.info("finish 'LoginToGmail'");
 	}
@@ -80,7 +79,7 @@ public class CreateAndCheckDraftsTest extends BaseTest {
 	public void checkDraftsTest() {
 		LOG.info("start 'checkDraftsTest'");
 
-		MainPage mainPage = new MainPage(driver);
+		MainPage mainPage = new MainPage();
 		actualMailData = new ArrayList<>();
 		actualMailDataToObject = new Object[3][];
 		int row = 0;
@@ -113,7 +112,7 @@ public class CreateAndCheckDraftsTest extends BaseTest {
 	public Object[][] mailData() {
 		List<String[]> dataList = new ArrayList<>();
 
-		try (BufferedReader input = new BufferedReader(new FileReader("DataProvider.txt"))) {
+		try (BufferedReader input = new BufferedReader(new FileReader("SecondDataProvider.txt"))) {
 			String line;
 
 			while ((line = input.readLine()) != null) {

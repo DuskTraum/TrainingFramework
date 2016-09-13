@@ -1,7 +1,5 @@
 package com.epam.yuri_karpov.selenium.service;
 
-import org.openqa.selenium.WebDriver;
-
 import com.epam.yuri_karpov.selenium.bo.Account;
 import com.epam.yuri_karpov.selenium.bo.Letter;
 import com.epam.yuri_karpov.selenium.ui.pageobject.GooglePage;
@@ -12,13 +10,7 @@ import com.epam.yuri_karpov.selenium.ui.pageobject.MainPage;
  *
  * @author Yuri Karpov
  */
-public class MailService {
-
-	private WebDriver driver;
-
-	public MailService(WebDriver driver) {
-		this.driver = driver;
-	}
+public class MailService extends BaseService {
 
 	/**
 	 * Method for login to GMail
@@ -27,7 +19,7 @@ public class MailService {
 	 *
 	 */
 	public void loginToMail(Account account) {
-		GooglePage gPage = new GooglePage(driver);
+		GooglePage gPage = new GooglePage();
 
 		gPage.clickMail().clickOnSignIn()
 		        .setLogin(account)
@@ -43,7 +35,7 @@ public class MailService {
 	 *
 	 */
 	public void sendMail(Letter letter) {
-		MainPage main = new MainPage(driver);
+		MainPage main = new MainPage();
 
 		main.composeAndSendMail(letter);
 	}
@@ -55,7 +47,7 @@ public class MailService {
 	 *
 	 */
 	public void generateDrafts(Letter letter) {
-		MainPage main = new MainPage(driver);
+		MainPage main = new MainPage();
 
 		main.composeDraft(letter);
 	}
@@ -64,7 +56,7 @@ public class MailService {
 	 * Method for log out from GMail
 	 */
 	public void logOut() {
-		MainPage main = new MainPage(driver);
+		MainPage main = new MainPage();
 
 		main.logOut();
 	}
@@ -73,7 +65,7 @@ public class MailService {
 	 * Method for click on Drafts tab
 	 */
 	public void clickOnDraftsTab() {
-		MainPage main = new MainPage(driver);
+		MainPage main = new MainPage();
 
 		main.clickOnDraftsTab();
 	}
@@ -82,7 +74,7 @@ public class MailService {
 	 * Method for discard Sent Mails
 	 */
 	public void clearSentMails() {
-		MainPage main = new MainPage(driver);
+		MainPage main = new MainPage();
 
 		main.discardSentMails();
 	}

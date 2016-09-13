@@ -8,16 +8,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
-import org.openqa.selenium.ElementNotVisibleException;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.FluentWait;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -28,6 +21,7 @@ import org.uncommons.reportng.HTMLReporter;
 import com.epam.yuri_karpov.selenium.bo.Account;
 import com.epam.yuri_karpov.selenium.bo.Letter;
 import com.epam.yuri_karpov.selenium.service.MailService;
+import com.epam.yuri_karpov.selenium.service.WaitService;
 import com.epam.yuri_karpov.selenium.ui.pageobject.MainPage;
 import com.epam.yuri_karpov.selenium.utils.ScreenShotListener;
 
@@ -65,9 +59,8 @@ public class SendAndCheckMailsTest extends BaseTest {
 		LOG.info("start 'LoginToGmail'");
 
 		account = new Account(resource.getString("login"), resource.getString("password"));
-		mailService = new MailService(driver);
+		mailService = new MailService();
 
-		driver.get(resource.getString("mainURL"));
 		mailService.loginToMail(account);
 		LOG.info("finish 'LoginToGmail'");
 	}
@@ -86,7 +79,7 @@ public class SendAndCheckMailsTest extends BaseTest {
 	public void checkSentMailsTest() {
 		LOG.info("start 'checkSentMailsTest'");
 
-		MainPage mainPage = new MainPage(driver);
+		MainPage mainPage = new MainPage();
 		actualMailData = new ArrayList<>();
 		actualMailDataToObject = new Object[3][];
 		int row = 0;
@@ -97,7 +90,7 @@ public class SendAndCheckMailsTest extends BaseTest {
 			List<String> actualMailDataInList = new ArrayList<>();
 
 			mainPage.getMailList().get(i).click();
-			waitForVisibilityOfElement(mainPage.getSentMailComposeTo());
+			WaitService.waitForVisibilityOfElement(mainPage.getSentMailComposeTo());
 			actualMailDataInList.add(mainPage.getSentMailComposeTo().getText());
 			actualMailDataInList.add(mainPage.getSentMailComposeSubject().getText());
 			actualMailDataInList.add(mainPage.getSentMailTextField().getText());
@@ -143,15 +136,6 @@ public class SendAndCheckMailsTest extends BaseTest {
 		Letter letter = new Letter(to, subj, text);
 
 		return letter;
-	}
-
-	public void waitForVisibilityOfElement(WebElement element) {
-		FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver).withTimeout(15, TimeUnit.SECONDS)
-		        .pollingEvery(3, TimeUnit.SECONDS)
-		        .ignoring(NoSuchElementException.class, ElementNotVisibleException.class);
-
-		wait.until(
-		        ExpectedConditions.visibilityOf(element));
 	}
 
 }
