@@ -112,7 +112,7 @@ public class SendAndCheckMailsTest extends BaseTest {
 	}
 
 	@DataProvider(name = "mailData")
-	public Object[][] mailData() {
+	public Object[][] mailData() throws IOException {
 		List<String[]> dataList = new ArrayList<>();
 
 		try (BufferedReader input = new BufferedReader(new FileReader("DataProvider.txt"))) {
@@ -124,6 +124,7 @@ public class SendAndCheckMailsTest extends BaseTest {
 
 			dataToLetters = dataList.toArray(new String[][] {});
 		}
+
 		catch (FileNotFoundException fe) {
 			System.err.println(fe);
 		}

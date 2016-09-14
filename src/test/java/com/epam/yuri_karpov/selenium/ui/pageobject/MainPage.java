@@ -241,6 +241,7 @@ public class MainPage extends AbstractPage {
 		LOG.trace("start 'logOut'");
 		JavascriptExecutor ex = (JavascriptExecutor) driver;
 
+		WaitService.waitUntilElementToBeClickable(myMailButton);
 		ex.executeScript("arguments[0].click();", myMailButton);
 		WaitService.waitUntilElementToBeClickable(signOutButton);
 		signOutButton.click();
