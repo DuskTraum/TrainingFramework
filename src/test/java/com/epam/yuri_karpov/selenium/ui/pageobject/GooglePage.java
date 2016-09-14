@@ -17,7 +17,8 @@ public class GooglePage extends AbstractPage{
 	@FindBy(xpath = "//*[@href='https://mail.google.com/mail/?tab=wm' and contains(text(),'Почта')]")
 	private WebElement mailButton;
 
-	@FindBy(xpath = "//a[@class='gmail-nav__nav-link gmail-nav__nav-link__sign-in']")
+	@FindBy(xpath = "//a[@data-g-label='Sign in']")
+
 	private WebElement signInButton;
 
 	/**
@@ -41,7 +42,7 @@ public class GooglePage extends AbstractPage{
 	public LoginPage clickOnSignIn() {
 		LOG.trace("start 'clickOnSignIn'");
 
-		if (!driver.findElements(By.xpath("//a[@class='gmail-nav__nav-link gmail-nav__nav-link__sign-in']"))
+		if (!driver.findElements(By.xpath("//a[@data-g-label='Sign in']"))
 		        .isEmpty()) {
 			signInButton.click();
 		}

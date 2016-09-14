@@ -3,6 +3,7 @@ package com.epam.yuri_karpov.selenium.ui.pageobject;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -41,7 +42,7 @@ public class MainPage extends AbstractPage {
 	@FindBy(xpath = "//table[@role='presentation']//h2")
 	private WebElement sentMailComposeSubject;
 
-	@FindBy(xpath = "//div[@style='display:']//div [@dir='ltr']")
+	@FindBy(xpath = "//div[@role='listitem']//div[@dir='ltr']")
 	private WebElement sentMailTextField;
 
 	@FindBy(xpath = "//div[@role='complementary']//td[@dir='ltr']/span[@title]")
@@ -113,6 +114,15 @@ public class MainPage extends AbstractPage {
 	@FindBy(xpath = "//div[@data-tooltip='Settings']")
 	private WebElement settingsButton;
 
+	@FindBy(xpath = "//a[@title='Trash']")
+	private WebElement trashButton;
+
+	@FindBy(xpath = "//span[contains(text() , 'Empty Trash now')]")
+	private WebElement emptyTrashButton;
+
+	@FindBy(xpath = "//div[contains(text(),'Click here to')]")
+	private WebElement textEnterField;
+
 	/**
 	 * Method for compose draft
 	 *
@@ -123,6 +133,7 @@ public class MainPage extends AbstractPage {
 		LOG.trace("start 'composeMsg'");
 		LOG.trace(letter.toString());
 
+		WaitService.waitUntilElementToBeClickable(composeButton);
 		composeButton.click();
 		WaitService.waitUntilPresenceOfElementLocated(NEW_MESSAGE);
 		composeTo.sendKeys(letter.getTo());
@@ -143,6 +154,7 @@ public class MainPage extends AbstractPage {
 		LOG.trace("start 'composeAndSendMsg'");
 		LOG.trace(letter.toString());
 
+		WaitService.waitUntilElementToBeClickable(composeButton);
 		composeButton.click();
 		WaitService.waitUntilPresenceOfElementLocated(NEW_MESSAGE);
 		composeTo.sendKeys(letter.getTo());
@@ -160,7 +172,7 @@ public class MainPage extends AbstractPage {
 		LOG.trace("start 'clickOnDraftsTab'");
 
 		draftsButton.click();
-		WaitService.waitUntilElemntToBeClickable(THIRD_DRAFT);
+		WaitService.waitUntilElementToBeClickable(THIRD_DRAFT);
 		selectAllDraftsOrMails.click();
 		WaitService.waitUntilPresenceOfElementLocated(THIRD_DRAFT);
 		LOG.trace("finish 'clickOnDraftsTab'");
@@ -172,8 +184,9 @@ public class MainPage extends AbstractPage {
 	public void clickOnSentMail() {
 		LOG.trace("start 'clickOnSentMail'");
 
+		WaitService.waitUntilElementToBeClickable(sentMail);
 		sentMail.click();
-		WaitService.waitUntilElemntToBeClickable(THIRD_DRAFT);
+		WaitService.waitUntilElementToBeClickable(THIRD_DRAFT);
 		WaitService.waitUntilElementToBeClickable(selectAllDraftsOrMails);
 		WaitService.waitUntilPresenceOfElementLocated(THIRD_DRAFT);
 		LOG.trace("finish 'clickOnSentMail'");
@@ -189,7 +202,7 @@ public class MainPage extends AbstractPage {
 		new Actions(driver).moveToElement(navigateToBackToSentMailButton).build().perform();
 		WaitService.waitUntilElementToBeClickable(backToSentMailButton);
 		new Actions(driver).click(backToSentMailButton).build().perform();
-		WaitService.waitUntilElemntToBeClickable(THIRD_DRAFT);
+		WaitService.waitUntilElementToBeClickable(THIRD_DRAFT);
 		LOG.trace("finish 'clickOnBackToSentMailButton'");
 
 	}
@@ -229,8 +242,27 @@ public class MainPage extends AbstractPage {
 		JavascriptExecutor ex = (JavascriptExecutor) driver;
 
 		ex.executeScript("arguments[0].click();", myMailButton);
+		WaitService.waitUntilElementToBeClickable(signOutButton);
 		signOutButton.click();
 		LOG.trace("finish 'logOut'");
+	}
+
+	/**
+	 * Method for discard Trash
+	 */
+	public void clearTrash() {
+		LOG.trace("finish 'clearTrash'");
+
+		WaitService.waitUntilElementToBeClickable(trashButton);
+		trashButton.click();
+
+		if (!driver.findElements(By.xpath("//span[contains(text() , 'Empty Trash now')]"))
+		        .isEmpty()) {
+			emptyTrashButton.click();
+			WaitService.waitUntilPresenceOfElementLocated(OK_BUTTON);
+			okButton.click();
+		}
+		LOG.trace("start 'clearTrash'");
 	}
 
 	public WebElement getDraftTextField() {
@@ -275,6 +307,10 @@ public class MainPage extends AbstractPage {
 
 	public WebElement getDeleteSentMails() {
 		return deleteSentMails;
+	}
+
+	public WebElement getTextEnterField() {
+		return textEnterField;
 	}
 
 }

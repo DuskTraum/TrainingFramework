@@ -26,8 +26,8 @@ public class WaitService extends BaseService {
 	 */
 	public static void waitUntilElementToBeClickable(WebElement element) {
 		WebDriver driver = DriverManager.getDriver();
-		FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver).withTimeout(15, TimeUnit.SECONDS)
-		        .pollingEvery(3, TimeUnit.SECONDS)
+		FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver).withTimeout(17, TimeUnit.SECONDS)
+		        .pollingEvery(2, TimeUnit.SECONDS)
 		        .ignoring(NoSuchElementException.class, ElementNotVisibleException.class);
 
 		wait.until(ExpectedConditions.elementToBeClickable(element));
@@ -39,11 +39,11 @@ public class WaitService extends BaseService {
 	 * @param String
 	 *
 	 */
-	public static void waitUntilElemntToBeClickable(String stringXpath) {
+	public static void waitUntilElementToBeClickable(String stringXpath) {
 		WebDriver driver = DriverManager.getDriver();
 
-		FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver).withTimeout(15, TimeUnit.SECONDS)
-		        .pollingEvery(3, TimeUnit.SECONDS)
+		FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver).withTimeout(17, TimeUnit.SECONDS)
+		        .pollingEvery(2, TimeUnit.SECONDS)
 		        .ignoring(NoSuchElementException.class, ElementNotVisibleException.class);
 
 		wait.until(ExpectedConditions.elementToBeClickable(By.xpath(stringXpath)));
@@ -58,8 +58,8 @@ public class WaitService extends BaseService {
 	public static void waitUntilPresenceOfElementLocated(String stringXpath) {
 		WebDriver driver = DriverManager.getDriver();
 
-		FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver).withTimeout(15, TimeUnit.SECONDS)
-		        .pollingEvery(3, TimeUnit.SECONDS)
+		FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver).withTimeout(17, TimeUnit.SECONDS)
+		        .pollingEvery(2, TimeUnit.SECONDS)
 		        .ignoring(NoSuchElementException.class, ElementNotVisibleException.class);
 
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(stringXpath)));
@@ -74,8 +74,8 @@ public class WaitService extends BaseService {
 	public static void waitForVisibilityOfElement(WebElement element) {
 		WebDriver driver = DriverManager.getDriver();
 
-		FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver).withTimeout(15, TimeUnit.SECONDS)
-		        .pollingEvery(3, TimeUnit.SECONDS)
+		FluentWait<WebDriver> wait = new FluentWait<WebDriver>(driver).withTimeout(17, TimeUnit.SECONDS)
+		        .pollingEvery(2, TimeUnit.SECONDS)
 		        .ignoring(NoSuchElementException.class, ElementNotVisibleException.class);
 
 		wait.until(

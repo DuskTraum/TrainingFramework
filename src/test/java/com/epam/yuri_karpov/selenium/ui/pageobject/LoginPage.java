@@ -39,6 +39,7 @@ public class LoginPage extends AbstractPage {
 		LOG.trace("start 'setLogin'");
 		LOG.trace("Login:" + account.getLogin());
 
+		WaitService.waitForVisibilityOfElement(loginInput);
 		new Actions(driver).sendKeys(loginInput, account.getLogin())
 		        .build()
 		        .perform();
@@ -53,6 +54,7 @@ public class LoginPage extends AbstractPage {
 	public LoginPage clickNext() {
 		LOG.trace("start 'clickNext'");
 
+		WaitService.waitUntilElementToBeClickable(nextButton);
 		new Actions(driver).click(nextButton)
 		        .build()
 		        .perform();
@@ -83,6 +85,7 @@ public class LoginPage extends AbstractPage {
 	public MainPage signInToMail() {
 		LOG.trace("start 'signInBtn'");
 
+		WaitService.waitUntilElementToBeClickable(signInButton);
 		new Actions(driver).click(signInButton)
 		        .build()
 		        .perform();

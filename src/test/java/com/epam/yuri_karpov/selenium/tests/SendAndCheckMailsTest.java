@@ -62,6 +62,7 @@ public class SendAndCheckMailsTest extends BaseTest {
 		mailService = new MailService();
 
 		mailService.loginToMail(account);
+		mailService.clearTrash();
 		LOG.info("finish 'LoginToGmail'");
 	}
 
@@ -90,7 +91,7 @@ public class SendAndCheckMailsTest extends BaseTest {
 			List<String> actualMailDataInList = new ArrayList<>();
 
 			mainPage.getMailList().get(i).click();
-			WaitService.waitForVisibilityOfElement(mainPage.getSentMailComposeTo());
+			WaitService.waitForVisibilityOfElement(mainPage.getTextEnterField());
 			actualMailDataInList.add(mainPage.getSentMailComposeTo().getText());
 			actualMailDataInList.add(mainPage.getSentMailComposeSubject().getText());
 			actualMailDataInList.add(mainPage.getSentMailTextField().getText());

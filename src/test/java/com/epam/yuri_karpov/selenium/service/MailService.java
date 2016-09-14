@@ -79,4 +79,13 @@ public class MailService extends BaseService {
 		main.discardSentMails();
 	}
 
+	/**
+	 * Method for discard Trash
+	 */
+	public void clearTrash() {
+		MainPage main = new MainPage();
+
+		main.clearTrash();
+	}
+
 }
