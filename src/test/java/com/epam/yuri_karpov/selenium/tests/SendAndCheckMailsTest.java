@@ -112,7 +112,7 @@ public class SendAndCheckMailsTest extends BaseTest {
 	}
 
 	@DataProvider(name = "mailData")
-	public Object[][] mailData() throws IOException {
+	public Object[][] mailData() {
 		List<String[]> dataList = new ArrayList<>();
 
 		try (BufferedReader input = new BufferedReader(new FileReader("DataProvider.txt"))) {
