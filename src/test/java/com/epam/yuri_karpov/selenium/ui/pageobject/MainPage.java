@@ -11,6 +11,8 @@ import org.openqa.selenium.support.FindBy;
 
 import com.epam.yuri_karpov.selenium.bo.Letter;
 import com.epam.yuri_karpov.selenium.service.WaitService;
+import com.epam.yuri_karpov.selenium.ui.elements.CommonElement;
+import com.epam.yuri_karpov.selenium.ui.elements.SmallMessageWindow;
 
 /**
  * Class works with Main page
@@ -21,20 +23,14 @@ public class MainPage extends AbstractPage {
 
 	private static final String OK_BUTTON = "//button[@name='ok']";
 	private static final String THIRD_DRAFT = "//div[@role='main']//tbody/tr[3]";
-	private static final String NEW_MESSAGE = "//div[contains(text(), 'New Message')]";
 	private static final String VIEW_MESSAGE = "//span[contains(text(),'View message')]";
-	private static final String SAVED_MESSAGE = "//span[contains(text(),'Saved')]";
 	private static final Logger LOG = Logger.getLogger(MainPage.class);
 	private static final String DRAFTS_HAVE_BEEN_DELETED_MSG = "//span[contains(text(), 'Drafts have been deleted')]";
 
+	private SmallMessageWindow smallMessageWindow;
+
 	@FindBy(xpath = "//div[contains(text(), 'COMPOSE')]")
 	private WebElement composeButton;
-
-	@FindBy(xpath = "//textarea[@name='to']")
-	private WebElement composeTo;
-
-	@FindBy(xpath = "//input[@name = 'subjectbox']")
-	private WebElement composeSubject;
 
 	@FindBy(xpath = "//input[@type = 'hidden' and @name = 'subject']")
 	private WebElement hiddenSubject;
@@ -47,21 +43,6 @@ public class MainPage extends AbstractPage {
 
 	@FindBy(xpath = "//div[@role='complementary']//td[@dir='ltr']/span[@title]")
 	private WebElement sentMailComposeTo;
-
-	@FindBy(xpath = "//div[@aria-label = 'Message Body']")
-	private WebElement draftTextField;
-
-	@FindBy(xpath = "//div[@style]/span[@email]")
-	private WebElement draftComposeToField;
-
-	@FindBy(xpath = "//h2/div[@style]")
-	private WebElement draftComposeSubject;
-
-	@FindBy(xpath = "//img[@alt = 'Close']")
-	private WebElement closeComposeButton;
-
-	@FindBy(xpath = NEW_MESSAGE)
-	private WebElement newMessageBox;
 
 	@FindBy(xpath = "//a[contains(text(), 'Drafts')]")
 	private WebElement draftsButton;
@@ -80,9 +61,6 @@ public class MainPage extends AbstractPage {
 
 	@FindBy(xpath = "//span[contains(text(), 'View message')]")
 	private WebElement sendMessageConfirm;
-
-	@FindBy(xpath = "//div[contains(text(), 'Send')]")
-	private WebElement sendMessage;
 
 	@FindBy(xpath = "//div[@title = 'Back to Sent Mail']")
 	private WebElement navigateToBackToSentMailButton;
@@ -114,7 +92,7 @@ public class MainPage extends AbstractPage {
 	@FindBy(xpath = "//div[@data-tooltip='Settings']")
 	private WebElement settingsButton;
 
-	@FindBy(xpath = "//a[@title='Trash']")
+	@FindBy(xpath = "//a[contains(text(),'Trash')]")
 	private WebElement trashButton;
 
 	@FindBy(xpath = "//span[contains(text() , 'Empty Trash now')]")
@@ -135,12 +113,7 @@ public class MainPage extends AbstractPage {
 
 		WaitService.waitUntilElementToBeClickable(composeButton);
 		composeButton.click();
-		WaitService.waitUntilPresenceOfElementLocated(NEW_MESSAGE);
-		composeTo.sendKeys(letter.getTo());
-		composeSubject.sendKeys(letter.getSubject());
-		draftTextField.sendKeys(letter.getText());
-		WaitService.waitUntilPresenceOfElementLocated(SAVED_MESSAGE);
-		closeComposeButton.click();
+		smallMessageWindow.fillAndSaveLetter(letter.getTo(), letter.getSubject(), letter.getText());
 		LOG.trace("finish 'composeMsg'");
 	}
 
@@ -156,11 +129,7 @@ public class MainPage extends AbstractPage {
 
 		WaitService.waitUntilElementToBeClickable(composeButton);
 		composeButton.click();
-		WaitService.waitUntilPresenceOfElementLocated(NEW_MESSAGE);
-		composeTo.sendKeys(letter.getTo());
-		composeSubject.sendKeys(letter.getSubject());
-		draftTextField.sendKeys(letter.getText());
-		sendMessage.click();
+		smallMessageWindow.fillAndSendLetter(letter.getTo(), letter.getSubject(), letter.getText());
 		WaitService.waitUntilPresenceOfElementLocated(VIEW_MESSAGE);
 		LOG.trace("finish 'composeAndSendMsg'");
 	}
@@ -244,7 +213,7 @@ public class MainPage extends AbstractPage {
 		WaitService.waitUntilElementToBeClickable(myMailButton);
 		ex.executeScript("arguments[0].click();", myMailButton);
 		WaitService.waitUntilElementToBeClickable(signOutButton);
-		signOutButton.click();
+		ex.executeScript("arguments[0].click();", signOutButton);
 		LOG.trace("finish 'logOut'");
 	}
 
@@ -266,16 +235,16 @@ public class MainPage extends AbstractPage {
 		LOG.trace("start 'clearTrash'");
 	}
 
-	public WebElement getDraftTextField() {
-		return draftTextField;
+	public CommonElement getDraftTextField() {
+		return smallMessageWindow.getComposeTextField();
 	}
 
-	public WebElement getDraftComposeToField() {
-		return draftComposeToField;
+	public CommonElement getDraftComposeToField() {
+		return smallMessageWindow.getDraftComposeToField();
 	}
 
 	public WebElement getDraftComposeSubject() {
-		return draftComposeSubject;
+		return smallMessageWindow.getDraftComposeSubject();
 	}
 
 	public WebElement getComposeButton() {
@@ -287,7 +256,7 @@ public class MainPage extends AbstractPage {
 	}
 
 	public WebElement getCloseComposeButton() {
-		return closeComposeButton;
+		return smallMessageWindow.getCloseComposeButton();
 	}
 
 	public WebElement getSentMailComposeSubject() {

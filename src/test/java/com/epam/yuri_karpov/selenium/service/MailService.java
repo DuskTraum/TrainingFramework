@@ -22,7 +22,7 @@ public class MailService extends BaseService {
 		GooglePage gPage = new GooglePage();
 
 		gPage.clickMail().clickOnSignIn()
-		        .setLogin(account)
+		        .login(account)
 		        .clickNext()
 		        .setPassword(account)
 		        .signInToMail();

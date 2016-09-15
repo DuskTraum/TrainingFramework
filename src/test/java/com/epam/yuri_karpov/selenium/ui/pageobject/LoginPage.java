@@ -1,12 +1,9 @@
 package com.epam.yuri_karpov.selenium.ui.pageobject;
 
 import org.apache.log4j.Logger;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.FindBy;
 
 import com.epam.yuri_karpov.selenium.bo.Account;
-import com.epam.yuri_karpov.selenium.service.WaitService;
+import com.epam.yuri_karpov.selenium.ui.elements.LoginBlock;
 
 /**
  * Class works with Login page
@@ -15,17 +12,7 @@ import com.epam.yuri_karpov.selenium.service.WaitService;
  */
 public class LoginPage extends AbstractPage {
 
-	private static final String CONTAINS_MY_MAIL = "//a[contains(@title, 'yurii.kaprov@gmail.com')]";
-	private static final String PASSWORD_INPUT_FIELD = "//input[@id='Passwd']";
-
-	@FindBy(xpath = "//input[@id='Email']")
-	private WebElement loginInput;
-	@FindBy(xpath = PASSWORD_INPUT_FIELD)
-	private WebElement passwordInput;
-	@FindBy(xpath = "//input[@id='next']")
-	private WebElement nextButton;
-	@FindBy(xpath = "//input[@id='signIn']")
-	private WebElement signInButton;
+	private LoginBlock loginBlock;
 
 	private static final Logger LOG = Logger.getLogger(LoginPage.class);
 
@@ -35,14 +22,11 @@ public class LoginPage extends AbstractPage {
 	 * @param Account
 	 *
 	 */
-	public LoginPage setLogin(Account account) {
+	public LoginPage login(Account account) {
 		LOG.trace("start 'setLogin'");
 		LOG.trace("Login:" + account.getLogin());
 
-		WaitService.waitForVisibilityOfElement(loginInput);
-		new Actions(driver).sendKeys(loginInput, account.getLogin())
-		        .build()
-		        .perform();
+		loginBlock.login(account);
 		LOG.trace("finish 'setLogin'");
 		return this;
 	}
@@ -54,10 +38,7 @@ public class LoginPage extends AbstractPage {
 	public LoginPage clickNext() {
 		LOG.trace("start 'clickNext'");
 
-		WaitService.waitUntilElementToBeClickable(nextButton);
-		new Actions(driver).click(nextButton)
-		        .build()
-		        .perform();
+		loginBlock.clickNext();
 		LOG.trace("finish 'clickNext'");
 		return this;
 	}
@@ -71,8 +52,7 @@ public class LoginPage extends AbstractPage {
 	public LoginPage setPassword(Account account) {
 		LOG.trace("start 'setPassword'");
 
-		WaitService.waitUntilPresenceOfElementLocated(PASSWORD_INPUT_FIELD);
-		passwordInput.sendKeys(account.getPassword());
+		loginBlock.setPassword(account);
 		LOG.trace("finish 'setPassword'");
 		return this;
 	}
@@ -85,20 +65,9 @@ public class LoginPage extends AbstractPage {
 	public MainPage signInToMail() {
 		LOG.trace("start 'signInBtn'");
 
-		WaitService.waitUntilElementToBeClickable(signInButton);
-		new Actions(driver).click(signInButton)
-		        .build()
-		        .perform();
-		WaitService.waitUntilPresenceOfElementLocated(CONTAINS_MY_MAIL);
+		loginBlock.signInToMail();
 		LOG.trace("finish 'signInBtn'");
 		return new MainPage();
 	}
-
-	/**
-	 * Method for waiting until presence of WebElement to be located
-	 *
-	 * @param String
-	 *
-	 */
 
 }

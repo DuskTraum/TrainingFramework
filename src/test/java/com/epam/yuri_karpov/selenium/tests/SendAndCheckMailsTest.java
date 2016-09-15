@@ -62,7 +62,6 @@ public class SendAndCheckMailsTest extends BaseTest {
 		mailService = new MailService();
 
 		mailService.loginToMail(account);
-		mailService.clearTrash();
 		LOG.info("finish 'LoginToGmail'");
 	}
 
@@ -71,7 +70,7 @@ public class SendAndCheckMailsTest extends BaseTest {
 		LOG.info("start 'gmailsSendMsgs'");
 
 		letter = initLetters(to, subj, text);
-
+		mailService.clearTrash();
 		mailService.sendMail(letter);
 		LOG.info("finish 'gmailsSendMsgs'");
 	}
